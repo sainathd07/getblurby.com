@@ -334,7 +334,7 @@ export default function Home() {
             <ul className="space-y-1">
               <li><a href="#" className="hover:text-[#00ADB5]">Blog</a></li>
               <li><a href="#" className="hover:text-[#00ADB5]">Help Center</a></li>
-              <li><a href="#" className="hover:text-[#00ADB5]">Terms</a></li>
+              <li><a href="/terms" className="hover:text-[#00ADB5]">Terms</a></li>
               <li><a href="#" className="hover:text-[#00ADB5]">Privacy</a></li>
             </ul>
           </div>
