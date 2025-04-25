@@ -1,6 +1,9 @@
 # Node.js
 node_modules/
+
+# Next.js build output
 .next/
+out/
 
 # Logs
 npm-debug.log*
@@ -14,14 +17,15 @@ Thumbs.db
 # Env files
 .env
 .env.*
+.env.local
 
 # Editor directories and files
 .vscode/
 .idea/
 *.swp
 
-# Build output
-out/
+# Deployment
+.vercel/
 
 # Misc
 *.local

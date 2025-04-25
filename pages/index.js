@@ -2,7 +2,10 @@ import Head from 'next/head';
 
 import { useState } from 'react';
 
+import { useSession, signIn, signOut } from "next-auth/react";
+
 export default function Home() {
+  const { data: session } = useSession();
   const [pricingPeriod, setPricingPeriod] = useState('monthly');
   return (
     <div className="bg-[#222831] min-h-screen text-white">
@@ -15,13 +18,29 @@ export default function Home() {
         <div className="flex items-center space-x-2">
           <span className="text-2xl font-bold text-[#00ADB5]">Blurby AI</span>
         </div>
-        <div className="hidden md:flex items-center space-x-8">
-          <a href="#features" className="hover:text-[#00ADB5] transition">Features</a>
-          <a href="#pricing" className="hover:text-[#00ADB5] transition">Pricing</a>
-        </div>
         <div className="flex items-center space-x-4">
-          <button className="text-white px-4 py-1 rounded hover:bg-[#393E46] transition">Login</button>
-          <button className="bg-[#00ADB5] text-white px-4 py-1 rounded shadow hover:bg-[#00959a] transition font-semibold">Sign Up</button>
+          <a href="#pricing" className="hover:text-[#00ADB5] transition">Pricing</a>
+          <a href="#testimonials" className="hover:text-[#00ADB5] transition">Testimonials</a>
+          <a href="#how-it-works" className="hover:text-[#00ADB5] transition">How it Works</a>
+          {/* Auth Buttons */}
+          {session ? (
+            <div className="flex items-center space-x-2">
+              <span className="text-[#e0e0e0] text-sm">{session.user?.email}</span>
+              <button
+                onClick={() => signOut()}
+                className="bg-[#393E46] hover:bg-[#00ADB5] text-white px-4 py-2 rounded-lg font-semibold transition"
+              >
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => signIn('google')}
+              className="bg-[#00ADB5] hover:bg-[#00959a] text-white px-4 py-2 rounded-lg font-semibold transition"
+            >
+              Sign In
+            </button>
+          )}
         </div>
       </nav>
 
