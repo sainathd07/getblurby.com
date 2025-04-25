@@ -1,12 +1,27 @@
 import Head from 'next/head';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Home() {
   const { data: session } = useSession();
   const [pricingPeriod, setPricingPeriod] = useState('monthly');
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClick(e) {
+      if (!e.target.closest('#user-menu')) setMenuOpen(false);
+    }
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClick);
+    } else {
+      document.removeEventListener('mousedown', handleClick);
+    }
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [menuOpen]);
+
   return (
     <div className="bg-[#222831] min-h-screen text-white">
       <Head>
@@ -24,15 +39,17 @@ export default function Home() {
           <a href="#how-it-works" className="hover:text-[#00ADB5] transition">How it Works</a>
           {/* Auth Buttons */}
           {session ? (
-            <div className="flex items-center space-x-2">
-              <span className="text-[#e0e0e0] text-sm">{session.user?.email}</span>
-              <button
-                onClick={() => signOut()}
-                className="bg-[#393E46] hover:bg-[#00ADB5] text-white px-4 py-2 rounded-lg font-semibold transition"
-              >
-                Sign Out
-              </button>
-            </div>
+            <button
+              onClick={() => window.location.href = '/profile'}
+              className="focus:outline-none"
+              aria-label="Go to profile"
+            >
+              <img
+                src={session.user?.image}
+                alt="Profile"
+                className="w-9 h-9 rounded-full border-2 border-[#00ADB5] object-cover hover:ring-2 hover:ring-[#00ADB5] transition"
+              />
+            </button>
           ) : (
             <button
               onClick={() => signIn('google')}
