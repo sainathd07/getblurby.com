@@ -1,7 +1,7 @@
 import Head from 'next/head';
 
 export default function PrivacyPolicy() {
-  const session = undefined; // No session on legal pages, or implement if needed
+  // No session on legal pages, or implement if needed
   return (
     <div className="bg-[#222831] min-h-screen text-white">
       <Head>
@@ -10,16 +10,27 @@ export default function PrivacyPolicy() {
       </Head>
       {/* Navigation Bar */}
       <nav className="w-full flex items-center justify-between px-8 py-4 bg-[#222831]/80 backdrop-blur-md border-b border-[#393E46]">
-        <div className="flex items-center space-x-2">
-          <span className="text-2xl font-bold text-[#00ADB5]">Blurby AI</span>
-        </div>
-        <div className="flex items-center space-x-4">
-          <a href="/pricing" className="hover:text-[#00ADB5] transition">Pricing</a>
-          <a href="/" className="hover:text-[#00ADB5] transition">Home</a>
-          <a href="/terms" className="hover:text-[#00ADB5] transition">Terms</a>
-          <a href="/privacy" className="hover:text-[#00ADB5] transition">Privacy</a>
-        </div>
-      </nav>
+  <div className="flex items-center space-x-8">
+    <span className="text-2xl font-bold text-[#00ADB5]">Blurby AI</span>
+    <div className="flex items-center space-x-4">
+      <a href="#pricing" className="hover:text-[#00ADB5] transition">Pricing</a>
+      <a href="#testimonials" className="hover:text-[#00ADB5] transition">Testimonials</a>
+      <a href="#how-it-works" className="hover:text-[#00ADB5] transition">How it Works</a>
+    </div>
+  </div>
+  <div className="flex items-center">
+    <a href="/login" className="text-white font-semibold hover:underline transition" style={{ padding: '0.5rem 1rem' }}>
+      Login
+    </a>
+    <button
+      onClick={() => window.location.href = '/signup'}
+      className="bg-[#00ADB5] border border-[#00ADB5] text-white px-4 py-2 rounded-lg font-semibold ml-2 transition hover:bg-[#00959a] hover:text-white"
+    >
+      Sign Up
+    </button>
+  </div>
+</nav>
+
       <main className="max-w-2xl mx-auto py-16 px-4">
         <h1 className="text-3xl font-bold mb-8 text-center">PRIVACY POLICY</h1>
         <div className="bg-white/10 rounded-xl p-6 border border-[#393E46] text-[#e0e0e0] space-y-4">

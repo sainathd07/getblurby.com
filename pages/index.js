@@ -36,13 +36,15 @@ export default function Home() {
       </Head>
       {/* Navigation Bar */}
       <nav className="w-full flex items-center justify-between px-8 py-4 bg-[#222831]/80 backdrop-blur-md border-b border-[#393E46]">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-8">
           <span className="text-2xl font-bold text-[#00ADB5]">Blurby AI</span>
+          <div className="flex items-center space-x-4">
+            <a href="#pricing" className="hover:text-[#00ADB5] transition">Pricing</a>
+            <a href="#testimonials" className="hover:text-[#00ADB5] transition">Testimonials</a>
+            <a href="#how-it-works" className="hover:text-[#00ADB5] transition">How it Works</a>
+          </div>
         </div>
-        <div className="flex items-center space-x-4">
-          <a href="#pricing" className="hover:text-[#00ADB5] transition">Pricing</a>
-          <a href="#testimonials" className="hover:text-[#00ADB5] transition">Testimonials</a>
-          <a href="#how-it-works" className="hover:text-[#00ADB5] transition">How it Works</a>
+        <div className="flex items-center">
           {/* Auth Buttons */}
           {session ? (
             <button
@@ -58,12 +60,21 @@ export default function Home() {
 />
             </button>
           ) : (
-            <button
-              onClick={() => window.location.href = '/login'}
-              className="bg-[#00ADB5] hover:bg-[#00959a] text-white px-4 py-2 rounded-lg font-semibold transition"
-            >
-              Sign In
-            </button>
+            <>
+              <a
+                href="/login"
+                className="text-white font-semibold hover:underline transition"
+                style={{ padding: '0.5rem 1rem' }}
+              >
+                Login
+              </a>
+              <button
+                onClick={() => window.location.href = '/signup'}
+                className="bg-[#00ADB5] border border-[#00ADB5] text-white px-4 py-2 rounded-lg font-semibold ml-2 transition hover:bg-[#00959a] hover:text-white"
+              >
+                Sign Up
+              </button>
+            </>
           )}
         </div>
       </nav>
@@ -361,6 +372,7 @@ export default function Home() {
               <li><a href="#" className="hover:text-[#00ADB5]">Help Center</a></li>
               <li><a href="/terms" className="hover:text-[#00ADB5]">Terms</a></li>
               <li><a href="/privacy" className="hover:text-[#00ADB5]">Privacy</a></li>
+              <li><a href="/refund-policy" className="hover:text-[#00ADB5]">Refund Policy</a></li>
             </ul>
           </div>
           <div>
