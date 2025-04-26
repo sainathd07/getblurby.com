@@ -6,6 +6,12 @@ import { useState } from 'react';
 export default function Profile() {
   const { data: session } = useSession();
 
+  const profileImage = (session?.user?.image && session.user.image.trim() !== "")
+    ? session.user.image
+    : (session?.user?.email
+        ? `https://api.dicebear.com/7.x/identicon/png?seed=${encodeURIComponent(session.user.email)}`
+        : "https://api.dicebear.com/7.x/identicon/png?seed=blurbyuser");
+
   // Mock: Replace with real plan/license logic
   const plan = 'PRO'; // 'FREE', 'PRO', or 'ULTIMATE'
   const licenseKey = 'XXXX-YYYY-ZZZZ';
@@ -16,6 +22,32 @@ export default function Profile() {
       <Head>
         <title>Profile | Blurby AI</title>
       </Head>
+      {/* Navigation Bar */}
+      <nav className="w-full flex items-center justify-between px-8 py-4 bg-[#222831]/80 backdrop-blur-md border-b border-[#393E46]">
+        <div className="flex items-center space-x-2">
+          <span className="text-2xl font-bold text-[#00ADB5]">Blurby AI</span>
+        </div>
+        <div className="flex items-center space-x-4">
+          <a href="/pricing" className="hover:text-[#00ADB5] transition">Pricing</a>
+          <a href="/" className="hover:text-[#00ADB5] transition">Home</a>
+          <a href="/terms" className="hover:text-[#00ADB5] transition">Terms</a>
+          <a href="/privacy" className="hover:text-[#00ADB5] transition">Privacy</a>
+          {session?.user && (
+            <button
+              onClick={() => window.location.href = '/profile'}
+              className="focus:outline-none"
+              aria-label="Go to profile"
+            >
+              <img
+                src={profileImage}
+                onError={(e) => { e.currentTarget.src = "https://api.dicebear.com/7.x/identicon/png?seed=blurbyuser"; }}
+                alt="User Profile"
+                className="w-9 h-9 rounded-full border-2 border-[#00ADB5] object-cover hover:ring-2 hover:ring-[#00ADB5] transition"
+              />
+            </button>
+          )}
+        </div>
+      </nav>
       <main className="max-w-2xl mx-auto py-10 px-4">
         <h1 className="text-3xl font-bold mb-8">My Account</h1>
 
