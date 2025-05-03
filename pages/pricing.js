@@ -1,15 +1,18 @@
 import Head from 'next/head';
+import { useState } from 'react';
 
 export default function Pricing() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div className="bg-[#222831] min-h-screen text-white">
       <Head>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Pricing | Blurby AI</title>
         <meta name="description" content="Blurby AI Pricing: Compare Free, Pro, and Ultimate plans for the best LinkedIn & X post generation experience." />
       </Head>
       <nav className="w-full flex items-center justify-between px-8 py-4 bg-[#222831]/80 backdrop-blur-md border-b border-[#393E46]">
         <div className="flex items-center space-x-2">
-          <span className="text-2xl font-bold text-[#00ADB5]">Blurby AI</span>
+          <a href="/" aria-label="Go to Home" className="text-2xl font-bold text-[#00ADB5] hover:underline focus:outline-none">Blurby AI</a>
         </div>
         <div className="hidden md:flex items-center space-x-8">
           <a href="/" className="hover:text-[#00ADB5] transition">Home</a>
@@ -20,13 +23,14 @@ export default function Pricing() {
           <button className="bg-[#00ADB5] text-white px-4 py-1 rounded shadow hover:bg-[#00959a] transition font-semibold">Sign Up</button>
         </div>
       </nav>
-      <main className="max-w-7xl mx-auto px-8 py-16">
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-8 text-white text-center">Pricing</h1>
-        <p className="text-lg text-[#e0e0e0] mb-12 text-center">Choose the plan that fits your social media workflow. Upgrade anytime.</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <main className="container mx-auto px-2 sm:px-4 md:px-8 py-8 sm:py-12">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-8 text-white text-center">Pricing</h1>
+        <p className="text-lg sm:text-xl text-[#e0e0e0] mb-12 text-center">Choose the plan that fits your social media workflow. Upgrade anytime.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           {/* Free Plan */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-[#393E46] shadow-md flex flex-col items-center">
-            <h3 className="font-bold text-2xl text-[#00ADB5] mb-2">Free</h3>
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 sm:p-8 border border-[#393E46] shadow-md flex flex-col items-center">
+            <h3 className="font-bold text-2xl sm:text-3xl text-[#00ADB5] mb-2">Free</h3>
+            <div className="text-3xl sm:text-4xl font-bold text-white mb-2">$0</div>
             <div className="text-3xl font-bold text-white mb-2">$0</div>
             <ul className="text-[#e0e0e0] mb-6 space-y-2 text-center">
               <li>Basic post styles</li>

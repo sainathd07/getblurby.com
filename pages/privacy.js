@@ -1,43 +1,85 @@
 import Head from 'next/head';
+import { useState } from 'react';
+import { useSession } from "next-auth/react";
+import Link from 'next/link';
 
 export default function PrivacyPolicy() {
-  // No session on legal pages, or implement if needed
+  const [showMobileNav, setShowMobileNav] = useState(false);
+  const { data: session } = useSession();
+  const profileImage = (session?.user?.image && session.user.image.trim() !== "")
+    ? session.user.image
+    : (session?.user?.email
+        ? `https://api.dicebear.com/7.x/identicon/png?seed=${encodeURIComponent(session.user.email)}`
+        : "https://api.dicebear.com/7.x/identicon/png?seed=blurbyuser");
+
   return (
     <div className="bg-[#222831] min-h-screen text-white">
       <Head>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Privacy Policy | GetBlurby</title>
         <meta name="description" content="Privacy Policy for GetBlurby.com" />
       </Head>
       {/* Navigation Bar */}
-      <nav className="w-full flex items-center justify-between px-8 py-4 bg-[#222831]/80 backdrop-blur-md border-b border-[#393E46]">
-  <div className="flex items-center space-x-8">
-    <span className="text-2xl font-bold text-[#00ADB5]">Blurby AI</span>
-    <div className="flex items-center space-x-4">
-      <a href="#pricing" className="hover:text-[#00ADB5] transition">Pricing</a>
-      <a href="#testimonials" className="hover:text-[#00ADB5] transition">Testimonials</a>
-      <a href="#how-it-works" className="hover:text-[#00ADB5] transition">How it Works</a>
-    </div>
-  </div>
-  <div className="flex items-center">
-    <a href="/login" className="text-white font-semibold hover:underline transition" style={{ padding: '0.5rem 1rem' }}>
-      Login
-    </a>
-    <button
-      onClick={() => window.location.href = '/signup'}
-      className="bg-[#00ADB5] border border-[#00ADB5] text-white px-4 py-2 rounded-lg font-semibold ml-2 transition hover:bg-[#00959a] hover:text-white"
-    >
-      Sign Up
-    </button>
-  </div>
-</nav>
+      <nav className="w-full flex items-center justify-between px-4 sm:px-8 py-4 bg-[#222831]/80 backdrop-blur-md border-b border-[#393E46] relative z-20">
+        <div className="flex items-center space-x-8">
+          {/* Logo */}
+          <Link href="/" className="text-2xl font-bold text-[#00ADB5] hover:underline focus:outline-none">Blurby AI</Link>
 
-      <main className="max-w-2xl mx-auto py-16 px-4">
-        <h1 className="text-3xl font-bold mb-8 text-center">PRIVACY POLICY</h1>
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex md:items-start items-center space-x-8">
+            <Link href="/" className="hover:text-[#00ADB5] transition">Home</Link>
+          </div>
+        </div>
+        <div className="flex items-center space-x-4">
+          {session?.user ? (
+            <button
+              onClick={() => setShowMobileNav(!showMobileNav)}
+              className="focus:outline-none"
+              aria-label="Toggle navigation"
+            >
+              <img
+                src={profileImage}
+                onError={(e) => { e.currentTarget.src = "https://api.dicebear.com/7.x/identicon/png?seed=blurbyuser"; }}
+                alt="User Profile"
+                className="w-9 h-9 rounded-full border-2 border-[#00ADB5] object-cover hover:ring-2 hover:ring-[#00ADB5] transition"
+              />
+            </button>
+          ) : (
+            <div className="flex items-center space-x-4">
+              <Link href="/login" className="text-white font-semibold hover:underline transition px-3">Login</Link>
+              <Link href="/signup" className="bg-[#00ADB5] border border-[#00ADB5] text-white px-4 py-2 rounded-lg font-semibold transition hover:bg-[#00959a] hover:text-white">Sign Up</Link>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* Mobile Navigation Menu */}
+      {showMobileNav && (
+        <div className="md:hidden fixed inset-0 z-30 bg-[#222831] pt-20">
+          <div className="flex flex-col items-center space-y-6 p-6">
+            <Link href="/" className="text-xl font-semibold hover:text-[#00ADB5] transition">Home</Link>
+            <Link href="#pricing" className="text-xl font-semibold hover:text-[#00ADB5] transition">Pricing</Link>
+            <Link href="#testimonials" className="text-xl font-semibold hover:text-[#00ADB5] transition">Testimonials</Link>
+            <Link href="#how-it-works" className="text-xl font-semibold hover:text-[#00ADB5] transition">How it Works</Link>
+            <Link href="/profile" className="text-xl font-semibold hover:text-[#00ADB5] transition">Profile</Link>
+            <button 
+              onClick={() => setShowMobileNav(false)}
+              className="mt-4 text-[#ff6b6b] font-semibold"
+            >
+              Close Menu
+            </button>
+          </div>
+        </div>
+      )}
+
+      <main className="container mx-auto px-2 sm:px-4 md:px-8 py-8 sm:py-12">
+        <h1 className="text-3xl font-bold mb-8 text-center sm:text-4xl md:text-5xl">PRIVACY POLICY</h1>
         <div className="bg-white/10 rounded-xl p-6 border border-[#393E46] text-[#e0e0e0] space-y-4">
           <p className="text-center font-semibold">Last updated April 26, 2025</p>
 
-          <p>Thank you for choosing to be part of our community at GetBlurby ("Company", "we", "us", or "our"). We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice or our practices with regards to your personal information, please contact us at <a href="mailto:support@getblurby.com" className="text-[#00ADB5] underline">support@getblurby.com</a>.</p>
+          <p className="text-sm sm:text-base md:text-lg">Thank you for choosing to be part of our community at GetBlurby ("Company", "we", "us", or "our"). We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice or our practices with regards to your personal information, please contact us at <a href="mailto:support@getblurby.com" className="text-[#00ADB5] underline">support@getblurby.com</a>.</p>
 
+          <p className="text-sm sm:text-base md:text-lg">When you visit our website https://getblurby.com (the "Website"), and more generally, use any of our services (the "Services", which include the Website), we appreciate that you are trusting us with your personal information. We take your privacy very seriously. In this privacy notice, we seek to explain to you in the clearest way possible what information we collect, how we use it and what rights you have in relation to it. If there are any terms in this privacy notice that you do not agree with, please discontinue use of our Services immediately.</p>
           <p>When you visit our website https://getblurby.com (the "Website"), and more generally, use any of our services (the "Services", which include the Website), we appreciate that you are trusting us with your personal information. We take your privacy very seriously. In this privacy notice, we seek to explain to you in the clearest way possible what information we collect, how we use it and what rights you have in relation to it. If there are any terms in this privacy notice that you do not agree with, please discontinue use of our Services immediately.</p>
 
           <p>This privacy notice applies to all information collected through our Services (which, as described above, includes our Website), as well as, any related services, sales, marketing or events.</p>

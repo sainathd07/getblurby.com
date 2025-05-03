@@ -1,48 +1,96 @@
 import Head from 'next/head';
+import { useState } from 'react';
+import { useSession, signIn, signOut } from "next-auth/react";
+import Link from 'next/link';
+
+import { useRouter } from 'next/router';
 
 export default function Terms() {
+  const { data: session } = useSession();
+  const [showMobileNav, setShowMobileNav] = useState(false);
+  const router = useRouter();
+  const profileImage = (session?.user?.image && session.user.image.trim() !== "")
+    ? session.user.image
+    : (session?.user?.email
+        ? `https://api.dicebear.com/7.x/identicon/png?seed=${encodeURIComponent(session.user.email)}`
+        : "https://api.dicebear.com/7.x/identicon/png?seed=blurbyuser");
+
+  const handleMenuClick = () => {
+    setShowMobileNav(!showMobileNav);
+  };
+
   // No session on legal pages, or implement if needed
   return (
     <div className="bg-[#222831] min-h-screen text-white">
       <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Terms of Use | GetBlurby</title>
         <meta name="description" content="Terms of Use for GetBlurby.com" />
       </Head>
       {/* Navigation Bar */}
-      <nav className="w-full flex items-center justify-between px-8 py-4 bg-[#222831]/80 backdrop-blur-md border-b border-[#393E46]">
-  <div className="flex items-center space-x-8">
-    <span className="text-2xl font-bold text-[#00ADB5]">Blurby AI</span>
-    <div className="flex items-center space-x-4">
-      <a href="#pricing" className="hover:text-[#00ADB5] transition">Pricing</a>
-      <a href="#testimonials" className="hover:text-[#00ADB5] transition">Testimonials</a>
-      <a href="#how-it-works" className="hover:text-[#00ADB5] transition">How it Works</a>
-    </div>
-  </div>
-  <div className="flex items-center">
-    <a href="/login" className="text-white font-semibold hover:underline transition" style={{ padding: '0.5rem 1rem' }}>
-      Login
-    </a>
-    <button
-      onClick={() => window.location.href = '/signup'}
-      className="bg-[#00ADB5] border border-[#00ADB5] text-white px-4 py-2 rounded-lg font-semibold ml-2 transition hover:bg-[#00959a] hover:text-white"
-    >
-      Sign Up
-    </button>
-  </div>
-</nav>
+      <nav className="w-full flex items-center justify-between px-4 sm:px-8 py-4 bg-[#222831]/80 backdrop-blur-md border-b border-[#393E46] relative z-20">
+        <div className="flex items-center space-x-8">
+          {/* Logo */}
+          <Link href="/" className="text-2xl font-bold text-[#00ADB5] hover:underline focus:outline-none">Blurby AI</Link>
 
-      <main className="max-w-2xl mx-auto py-16 px-4">
-        <h1 className="text-3xl font-bold mb-8 text-center">TERMS OF USE</h1>
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex md:items-start items-center space-x-8">
+            <Link href="/" className="hover:text-[#00ADB5] transition">Home</Link>
+          </div>
+        </div>
+        <div className="flex items-center space-x-4">
+          {session?.user ? (
+            <button
+              onClick={() => setShowMobileNav(!showMobileNav)}
+              className="focus:outline-none"
+              aria-label="Toggle navigation"
+            >
+              <img
+                src={profileImage}
+                onError={(e) => { e.currentTarget.src = "https://api.dicebear.com/7.x/identicon/png?seed=blurbyuser"; }}
+                alt="User Profile"
+                className="w-9 h-9 rounded-full border-2 border-[#00ADB5] object-cover hover:ring-2 hover:ring-[#00ADB5] transition"
+              />
+            </button>
+          ) : (
+            <div className="flex items-center space-x-4">
+              <Link href="/login" className="text-white font-semibold hover:underline transition px-3">Login</Link>
+              <Link href="/signup" className="bg-[#00ADB5] border border-[#00ADB5] text-white px-4 py-2 rounded-lg font-semibold transition hover:bg-[#00959a] hover:text-white">Sign Up</Link>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* Mobile Navigation Menu */}
+      {showMobileNav && (
+        <div className="md:hidden fixed inset-0 z-30 bg-[#222831] pt-20">
+          <div className="flex flex-col items-center space-y-6 p-6">
+            <Link href="/" className="text-xl font-semibold hover:text-[#00ADB5] transition">Home</Link>
+            <Link href="/profile" className="text-xl font-semibold hover:text-[#00ADB5] transition">Profile</Link>
+            <button 
+              onClick={() => setShowMobileNav(false)}
+              className="mt-4 text-[#ff6b6b] font-semibold"
+            >
+              Close Menu
+            </button>
+          </div>
+        </div>
+      )}
+
+      <main className="container mx-auto px-2 sm:px-4 md:px-8 py-8 sm:py-12">
+        <h1 className="text-3xl font-bold mb-8 text-center sm:text-4xl md:text-5xl">TERMS OF USE</h1>
         <div className="bg-white/10 rounded-xl p-6 border border-[#393E46] text-[#e0e0e0] space-y-4">
           <p className="text-center font-semibold">Last updated April 26, 2025</p>
 
-          <h2 className="text-xl font-semibold mt-6">AGREEMENT TO TERMS</h2>
-          <p>These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and GetBlurby ("Company", "we", "us", or "our"), concerning your access to and use of the https://getblurby.com website as well as any other media form, media channel, mobile website, or mobile application related, linked, or otherwise connected thereto (collectively, the "Site"). By accessing the Site, you agree that you have read, understood, and agree to be bound by all of these Terms of Use. IF YOU DO NOT AGREE WITH ALL OF THESE TERMS OF USE, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SITE AND MUST DISCONTINUE USE IMMEDIATELY.</p>
-          <p>Supplemental terms and conditions or documents that may be posted on the Site from time to time are hereby expressly incorporated herein by reference. We reserve the right, in our sole discretion, to make changes or modifications to these Terms of Use at any time and for any reason. We will alert you about any changes by updating the “Last updated” date of these Terms of Use. It is your responsibility to periodically review these Terms of Use to stay informed of updates. Your continued use of the Site signifies acceptance of any revised Terms of Use.</p>
+          <h2 className="text-xl text-center font-semibold mt-6 sm:text-2xl md:text-3xl">AGREEMENT TO TERMS</h2>
+          <p className="text-sm sm:text-base md:text-lg">These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and GetBlurby ("Company", "we", "us", or "our"), concerning your access to and use of the https://getblurby.com website as well as any other media form, media channel, mobile website, or mobile application related, linked, or otherwise connected thereto (collectively, the "Site"). By accessing the Site, you agree that you have read, understood, and agree to be bound by all of these Terms of Use. IF YOU DO NOT AGREE WITH ALL OF THESE TERMS OF USE, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SITE AND MUST DISCONTINUE USE IMMEDIATELY.</p>
+          <p className="text-sm sm:text-base md:text-lg">Supplemental terms and conditions or documents that may be posted on the Site from time to time are hereby expressly incorporated herein by reference. We reserve the right, in our sole discretion, to make changes or modifications to these Terms of Use at any time and for any reason. We will alert you about any changes by updating the "Last updated" date of these Terms of Use. It is your responsibility to periodically review these Terms of Use to stay informed of updates. Your continued use of the Site signifies acceptance of any revised Terms of Use.</p>
+          <p className="text-sm sm:text-base md:text-lg">The Site is intended for users who are at least 13 years of age. All users who are minors in the jurisdiction in which they reside (generally under the age of 18) must have the permission of, and be directly supervised by, their parent or guardian to use the Site. If you are a minor, you must have your parent or guardian read and agree to these Terms of Use prior to your use of the Site.</p>
+          <p>Supplemental terms and conditions or documents that may be posted on the Site from time to time are hereby expressly incorporated herein by reference. We reserve the right, in our sole discretion, to make changes or modifications to these Terms of Use at any time and for any reason. We will alert you about any changes by updating the "Last updated" date of these Terms of Use. It is your responsibility to periodically review these Terms of Use to stay informed of updates. Your continued use of the Site signifies acceptance of any revised Terms of Use.</p>
           <p>The Site is intended for users who are at least 13 years of age. All users who are minors in the jurisdiction in which they reside (generally under the age of 18) must have the permission of, and be directly supervised by, their parent or guardian to use the Site. If you are a minor, you must have your parent or guardian read and agree to these Terms of Use prior to your use of the Site.</p>
 
           <h2 className="text-xl font-semibold mt-6">INTELLECTUAL PROPERTY RIGHTS</h2>
-          <p>Unless otherwise indicated, the Site is our proprietary property and all source code, databases, functionality, software, website designs, audio, video, text, photographs, and graphics on the Site (collectively, the “Content”) and the trademarks, service marks, and logos contained therein (the “Marks”) are owned or controlled by us or licensed to us, and are protected by copyright and trademark laws and various other intellectual property rights. The Content and the Marks are provided on the Site “AS IS” for your information and personal use only. Except as expressly provided in these Terms of Use, no part of the Site and no Content or Marks may be copied, reproduced, aggregated, republished, uploaded, posted, publicly displayed, encoded, translated, transmitted, distributed, sold, licensed, or otherwise exploited for any commercial purpose whatsoever, without our express prior written permission.</p>
+          <p>Unless otherwise indicated, the Site is our proprietary property and all source code, databases, functionality, software, website designs, audio, video, text, photographs, and graphics on the Site (collectively, the "Content") and the trademarks, service marks, and logos contained therein (the "Marks") are owned or controlled by us or licensed to us, and are protected by copyright and trademark laws and various other intellectual property rights. The Content and the Marks are provided on the Site "AS IS" for your information and personal use only. Except as expressly provided in these Terms of Use, no part of the Site and no Content or Marks may be copied, reproduced, aggregated, republished, uploaded, posted, publicly displayed, encoded, translated, transmitted, distributed, sold, licensed, or otherwise exploited for any commercial purpose whatsoever, without our express prior written permission.</p>
           <p>Provided that you are eligible to use the Site, you are granted a limited license to access and use the Site and to download or print a copy of any portion of the Content to which you have properly gained access solely for your personal, non-commercial use. We reserve all rights not expressly granted to you in and to the Site, the Content and the Marks.</p>
 
           <h2 className="text-xl font-semibold mt-6">USER REPRESENTATIONS</h2>
