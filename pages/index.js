@@ -15,8 +15,6 @@ export default function Home() {
   const [waitlistStatus, setWaitlistStatus] = useState('idle'); // idle | loading | success | error
   const [waitlistError, setWaitlistError] = useState('');
   const router = useRouter();
-  const SHEET_DB_URL = process.env.NEXT_PUBLIC_SHEET_DB_URL;
-
   // Close dropdown on outside click
   useEffect(() => {
     function handleClick(e) {
@@ -36,28 +34,28 @@ export default function Home() {
       ? `https://api.dicebear.com/7.x/identicon/png?seed=${encodeURIComponent(session.user.email)}`
       : "https://api.dicebear.com/7.x/identicon/png?seed=blurbyuser");
 
-  const handleWaitlistSubmit = async (e) => {
-    e.preventDefault();
-    setWaitlistStatus('loading');
-    setWaitlistError('');
-    try {
-      const res = await fetch(SHEET_DB_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: [{ email: waitlistEmail }] })
-      });
-      if (res.ok) {
-        setWaitlistStatus('success');
-        setWaitlistEmail('');
-      } else {
-        setWaitlistStatus('error');
-        setWaitlistError('Something went wrong. Please try again.');
-      }
-    } catch (err) {
-      setWaitlistStatus('error');
-      setWaitlistError('Network error. Please try again.');
-    }
-  };
+      const handleWaitlistSubmit = async (e) => {
+        e.preventDefault();
+        setWaitlistStatus('loading');
+        setWaitlistError('');
+        try {
+          const res = await fetch('/api/join-waitlist', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: waitlistEmail }),
+          });
+          if (res.ok) {
+            setWaitlistStatus('success');
+            setWaitlistEmail('');
+          } else {
+            setWaitlistStatus('error');
+            setWaitlistError('Something went wrong. Please try again.');
+          }
+        } catch (err) {
+          setWaitlistStatus('error');
+          setWaitlistError('Network error. Please try again.');
+        }
+      };
 
   return (
     <div className="bg-[#222831] min-h-screen text-white">
