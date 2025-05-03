@@ -104,7 +104,7 @@ export default function Home() {
         <div className="flex-1 max-w-xl w-full flex flex-col items-center md:items-center lg:items-start mb-0">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 text-center lg:text-left">Your AI Assistant for Effortless LinkedIn & X Posts</h1>
           <p className="text-lg text-[#e0e0e0] mb-6 text-center lg:text-left">Generate engaging, high-quality social posts from any article or web content. Save time, stay consistent, and boost your online presence with Blurby AI.</p>
-          <ul className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-[#e0e0e0] w-full max-w-md mx-auto md:mx-0">
+          <ul className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-[#e0e0e0] w-full max-w-md mx-auto md:mx-0 text-center lg:text-left">
             <li>✔️ One-Click Post Generation</li>
             <li>✔️ Multiple Post Styles</li>
             <li>✔️ Character Range Control</li>
@@ -112,9 +112,9 @@ export default function Home() {
             <li>✔️ Emojis & Hashtags</li>
             <li>✔️ Glassmorphic UI</li>
           </ul>
-          <div className="flex flex-col items-center gap-3 w-full">
-            <button className="bg-[#00ADB5] hover:bg-[#00959a] transition text-white px-6 py-3 rounded-lg font-semibold shadow-lg w-full max-w-xs">Install Free Extension</button>
-            <div className="flex items-center justify-center mt-1">
+          <div className="flex flex-col items-center lg:items-start gap-3 w-full lg:justify-start">
+            <button className="bg-[#00ADB5] hover:bg-[#00959a] transition text-white px-6 py-3 rounded-lg font-semibold shadow-lg w-full max-w-xs lg:w-auto lg:max-w-none">Install Free Extension</button>
+            <div className="flex items-center justify-center lg:justify-start mt-1 w-full lg:w-auto">
               <div className="flex -space-x-2 mr-3">
                 <img src="https://api.dicebear.com/7.x/identicon/svg?seed=alice" alt="user" className="w-8 h-8 rounded-full border-2 border-white" />
                 <img src="https://api.dicebear.com/7.x/identicon/svg?seed=bob" alt="user" className="w-8 h-8 rounded-full border-2 border-white" />
