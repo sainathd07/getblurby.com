@@ -45,8 +45,8 @@ export default function RefundPolicy() {
             </button>
           ) : (
             <div className="flex items-center space-x-4">
-              <Link href="/login" className="text-white font-semibold hover:underline transition px-3">Login</Link>
-              <Link href="/signup" className="bg-[#00ADB5] border border-[#00ADB5] text-white px-4 py-2 rounded-lg font-semibold transition hover:bg-[#00959a] hover:text-white">Sign Up</Link>
+              <Link href="" className="text-white font-semibold hover:underline transition px-3">Login</Link>
+              <Link href="" className="bg-[#00ADB5] border border-[#00ADB5] text-white px-4 py-2 rounded-lg font-semibold transition hover:bg-[#00959a] hover:text-white">Sign Up</Link>
             </div>
           )}
         </div>

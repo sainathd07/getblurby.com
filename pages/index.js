@@ -10,7 +10,12 @@ export default function Home() {
   const { data: session } = useSession();
   const [pricingPeriod, setPricingPeriod] = useState('monthly');
   const [showMobileNav, setShowMobileNav] = useState(false);
+  const [showWaitlistModal, setShowWaitlistModal] = useState(false);
+  const [waitlistEmail, setWaitlistEmail] = useState('');
+  const [waitlistStatus, setWaitlistStatus] = useState('idle'); // idle | loading | success | error
+  const [waitlistError, setWaitlistError] = useState('');
   const router = useRouter();
+  const SHEET_DB_URL = process.env.NEXT_PUBLIC_SHEET_DB_URL;
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -30,6 +35,29 @@ export default function Home() {
   : (session?.user?.email
       ? `https://api.dicebear.com/7.x/identicon/png?seed=${encodeURIComponent(session.user.email)}`
       : "https://api.dicebear.com/7.x/identicon/png?seed=blurbyuser");
+
+  const handleWaitlistSubmit = async (e) => {
+    e.preventDefault();
+    setWaitlistStatus('loading');
+    setWaitlistError('');
+    try {
+      const res = await fetch(SHEET_DB_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: [{ email: waitlistEmail }] })
+      });
+      if (res.ok) {
+        setWaitlistStatus('success');
+        setWaitlistEmail('');
+      } else {
+        setWaitlistStatus('error');
+        setWaitlistError('Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      setWaitlistStatus('error');
+      setWaitlistError('Network error. Please try again.');
+    }
+  };
 
   return (
     <div className="bg-[#222831] min-h-screen text-white">
@@ -73,8 +101,8 @@ export default function Home() {
             </>
           ) : (
             <div className="flex items-center space-x-4">
-              <Link href="/login" className="text-white font-semibold hover:underline transition px-3">Login</Link>
-              <Link href="/signup" className="bg-[#00ADB5] border border-[#00ADB5] text-white px-4 py-2 rounded-lg font-semibold transition hover:bg-[#00959a] hover:text-white">Sign Up</Link>
+              <Link href="" className="text-white font-semibold hover:underline transition px-3">Login</Link>
+              <Link href="" className="bg-[#00ADB5] border border-[#00ADB5] text-white px-4 py-2 rounded-lg font-semibold transition hover:bg-[#00959a] hover:text-white">Sign Up</Link>
             </div>
           )}
         </div>
@@ -113,7 +141,12 @@ export default function Home() {
             <li>✔️ Glassmorphic UI</li>
           </ul>
           <div className="flex flex-col items-center lg:items-start gap-3 w-full lg:justify-start">
-            <button className="bg-[#00ADB5] hover:bg-[#00959a] transition text-white px-6 py-3 rounded-lg font-semibold shadow-lg w-full max-w-xs lg:w-auto lg:max-w-none">Install Free Extension</button>
+            <button
+              className="bg-[#00ADB5] hover:bg-[#00959a] transition text-white px-6 py-3 rounded-lg font-semibold shadow-lg w-full max-w-xs lg:w-auto lg:max-w-none"
+              onClick={() => setShowWaitlistModal(true)}
+            >
+              Join Waitlist
+            </button>
             <div className="flex items-center justify-center lg:justify-start mt-1 w-full lg:w-auto">
               <div className="flex -space-x-2 mr-3">
                 <img src="https://api.dicebear.com/7.x/identicon/svg?seed=alice" alt="user" className="w-8 h-8 rounded-full border-2 border-white" />
@@ -342,6 +375,47 @@ export default function Home() {
           <button className="bg-[#00ADB5] hover:bg-[#00959a] transition text-white px-6 py-3 rounded-lg font-semibold shadow-lg">Install Free Extension</button>
         </div>
       </section>
+
+      {/* Waitlist Modal */}
+      {showWaitlistModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 px-4">
+          <div className="bg-[#23272f] rounded-2xl p-8 w-full max-w-md shadow-lg relative">
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl font-bold"
+              onClick={() => { setShowWaitlistModal(false); setWaitlistStatus('idle'); setWaitlistError(''); }}
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <h2 className="text-2xl font-bold mb-4 text-white text-center">Join the Waitlist</h2>
+            {waitlistStatus === 'success' ? (
+              <div className="text-green-400 text-center py-6">Thank you! You've been added to the waitlist.</div>
+            ) : (
+              <form onSubmit={handleWaitlistSubmit} className="flex flex-col gap-4">
+                <input
+                  type="email"
+                  required
+                  placeholder="Enter your email"
+                  className="px-4 py-3 rounded-lg bg-[#181b20] text-white border border-[#393E46] focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                  value={waitlistEmail}
+                  onChange={e => setWaitlistEmail(e.target.value)}
+                  disabled={waitlistStatus === 'loading'}
+                />
+                <button
+                  type="submit"
+                  className="bg-[#00ADB5] hover:bg-[#00959a] transition text-white px-6 py-3 rounded-lg font-semibold shadow-lg"
+                  disabled={waitlistStatus === 'loading'}
+                >
+                  {waitlistStatus === 'loading' ? 'Joining...' : 'Join Waitlist'}
+                </button>
+                {waitlistStatus === 'error' && (
+                  <div className="text-red-400 text-center">{waitlistError}</div>
+                )}
+              </form>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="bg-[#222831] border-t border-[#393E46] py-12 px-8 mt-16">
